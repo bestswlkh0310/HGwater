@@ -12,25 +12,27 @@ import retrofit2.Call
 import retrofit2.Callback
 
 class MainActivity : AppCompatActivity() {
-    val TAG: String = "로그"
+    val tag: String = "로그"
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // 물 온도 불러오기
         val call = RetrofitClient.api.getTemp()
         call.enqueue(object: Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: retrofit2.Response<JsonElement>) {
                 if (response.isSuccessful) {
                     val result = response.body()
                     val data = Gson().fromJson(result, hgwater::class.java)[1].respond
-                    binding.tv2.text = "${data.temp}도"
+                    val text = "${data.temp}도"
+                    binding.tv2.text = text
                 } else {
-                    Log.d(TAG, "응 - onResponse() called")
+                    Log.d(tag, "응 - onResponse() called")
                 }
             }
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                Log.d(TAG, "실패 ${t.message}")
+                Log.d(tag, "실패 ${t.message}")
             }
         })
     }
