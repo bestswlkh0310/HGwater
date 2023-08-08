@@ -3,7 +3,7 @@ package com.example.hgwater
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.hgwater.model.response.hgwater
+import com.example.hgwater.model.response.Hgwater
 import com.example.hgwater.databinding.ActivityMainBinding
 import com.example.hgwater.network.RetrofitClient
 import com.google.gson.Gson
@@ -18,13 +18,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // 물 온도 불러오기
         val call = RetrofitClient.api.getTemp()
         call.enqueue(object: Callback<JsonElement> {
             override fun onResponse(call: Call<JsonElement>, response: retrofit2.Response<JsonElement>) {
                 if (response.isSuccessful) {
+                    // 성공 시 텍스트 값 바꾸기
                     val result = response.body()
-                    val data = Gson().fromJson(result, hgwater::class.java)[1].respond
+                    val data = Gson().fromJson(result, Hgwater::class.java)[1].respond
                     val text = "${data.temp}도"
                     binding.tv2.text = text
                 } else {

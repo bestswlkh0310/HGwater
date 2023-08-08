@@ -1,4 +1,4 @@
-package com.example.hgwater.network.service
+package com.example.hgwater.network
 
 import com.google.gson.JsonElement
 import retrofit2.Call

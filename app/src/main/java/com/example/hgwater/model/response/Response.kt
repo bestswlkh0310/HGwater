@@ -1,6 +1,6 @@
 package com.example.hgwater.model.response
 
-data class Respond(
+data class Response(
     val day: String,
     val location: String,
     val month: String,

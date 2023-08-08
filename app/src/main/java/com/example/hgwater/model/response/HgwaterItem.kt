@@ -1,6 +1,6 @@
 package com.example.hgwater.model.response
 
-data class hgwaterItem(
-    val respond: Respond,
+data class HgwaterItem(
+    val respond: Response,
     val result: String
 )
