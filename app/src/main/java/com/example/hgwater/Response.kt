@@ -35,5 +35,7 @@ data class HGContent(
     @SerializedName("LAST_UPDATE")
     val lastUpdate: String,
     @SerializedName("PH")
-    val ph: Float?
+    val ph: Float?,
+    // for model
+    val name: String?
 )
