@@ -16,6 +16,24 @@ class MainActivity : AppCompatActivity() {
 
     // locations
     private val locationsSource = PublishSubject.create<List<HGContent>>()
+        .apply {
+            subscribe {
+                val linearLayout = binding.llLocations
+                linearLayout.removeAllViews()
+                it.forEachIndexed { idx, item ->
+                    val hgItem = LayoutHgLocationItemBinding.inflate(layoutInflater)
+                    hgItem.apply {
+                        val tempText = item.temp?.let { temp -> "$temp°" } ?: "-"
+                        tvTemp.text = tempText
+                        tvLocation.text = item.name
+                    }
+                    hgItem.root.setOnClickListener {
+                        currentLocationIndexSource.onNext(idx)
+                    }
+                    linearLayout.addView(hgItem.root)
+                }
+            }.let { }
+        }
     private var locations = listOf<HGContent>()
         set(value) {
             field = value
@@ -24,6 +42,16 @@ class MainActivity : AppCompatActivity() {
 
     // currentLocationIndex
     private val currentLocationIndexSource = PublishSubject.create<Int>()
+        .apply {
+            subscribe {
+                val hgTempString = locations[it].temp?.let { temp -> "$temp°" } ?: "-"
+                binding.apply {
+                    tvTemp.text = hgTempString
+                    val tvLocationText = "오늘의 ${locations[it].name} 온도"
+                    tvLocation.text = tvLocationText
+                }
+            }.let {  }
+        }
     private var currentLocationIndex = 0
         set(value) {
             field = value
@@ -33,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        handleSource()
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -59,32 +87,5 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
         }
-    }
-
-    private fun handleSource() {
-        locationsSource.subscribe {
-            val linearLayout = binding.llLocations
-            linearLayout.removeAllViews()
-            it.forEachIndexed { idx, item ->
-                val hgItem = LayoutHgLocationItemBinding.inflate(layoutInflater)
-                hgItem.apply {
-                    val tempText = item.temp?.let { temp -> "$temp°" } ?: "-"
-                    tvTemp.text = tempText
-                    tvLocation.text = item.name
-                }
-                hgItem.root.setOnClickListener {
-                    currentLocationIndexSource.onNext(idx)
-                }
-                linearLayout.addView(hgItem.root)
-            }
-        }.let { }
-        currentLocationIndexSource.subscribe {
-            val hgTempString = locations[it].temp?.let { temp -> "$temp°" } ?: "-"
-            binding.apply {
-                tvTemp.text = hgTempString
-                val tvLocationText = "오늘의 ${locations[it].name} 온도"
-                tvLocation.text = tvLocationText
-            }
-        }.let { }
     }
 }
