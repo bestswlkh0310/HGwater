@@ -1,4 +1,4 @@
-package com.example.hgwater.network
+package com.example.hgwater
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val url = "https://api.qwer.pw/request/"
+    private const val URL = "https://api.hangang.life/"
 
     private val gson: Gson = GsonBuilder()
         .setLenient()
@@ -15,7 +15,7 @@ object RetrofitClient {
     private val client = OkHttpClient.Builder()
 
     private val server = Retrofit.Builder()
-        .baseUrl(url)
+        .baseUrl(URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(client.build())
         .build()
